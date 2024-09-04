@@ -17,21 +17,33 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from talents.views import CategoryViewSet, TalentViewSet, ContentViewSet, CommentViewSet, LikeViewSet
+from talents.views import CategoryViewSet, TalentViewSet, ContentViewSet
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from challenges.views import ChallengeViewSet, SubmissionViewSet, VoteViewSet
+from learning.views import TutorialViewSet, WorkshopViewSet
+from marketplace.views import ServiceViewSet
+from community.views import MessageViewSet, GroupViewSet, ProjectViewSet
+
 
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet)
 router.register(r'talents', TalentViewSet)
 router.register(r'contents', ContentViewSet)
-router.register(r'comments', CommentViewSet)
-router.register(r'likes', LikeViewSet)
 router.register(r'challenges', ChallengeViewSet)
 router.register(r'submissions', SubmissionViewSet)
 router.register(r'votes', VoteViewSet)
+router.register(r'tutorials', TutorialViewSet)
+router.register(r'workshops', WorkshopViewSet)
+router.register(r'services', ServiceViewSet)
+router.register(r'messages', MessageViewSet)
+router.register(r'groups', GroupViewSet)
+router.register(r'projects', ProjectViewSet)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/users/', include('users.urls')),
 ]
